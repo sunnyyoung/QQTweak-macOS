@@ -12,7 +12,7 @@ __attribute__((constructor)) static void revokeMessages(void) {
     SEL selector = NSSelectorFromString(@"revokeMessages:");
     Method method = class_getInstanceMethod(class, selector);
     IMP imp = imp_implementationWithBlock(^(id self, id arg1) {
-        // Do nothing
+        return ;
     });
     class_replaceMethod(class, selector, imp, method_getTypeEncoding(method));
 }
@@ -27,6 +27,56 @@ __attribute__((constructor)) static void handleRecallNotify(void) {
             userNotification.informativeText = @"成功拦截一条撤回消息";
             [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:userNotification];
         });
+    });
+    class_replaceMethod(class, selector, imp, method_getTypeEncoding(method));
+}
+
+__attribute__((constructor)) static void QQReportEngine(void) {
+    Class class = objc_getClass("QQReportEngine");
+    SEL selector = NSSelectorFromString(@"init");
+    Method method = class_getInstanceMethod(class, selector);
+    IMP imp = imp_implementationWithBlock(^(id self, id arg1) {
+        return nil;
+    });
+    class_replaceMethod(class, selector, imp, method_getTypeEncoding(method));
+}
+
+__attribute__((constructor)) static void QQLogReporter(void) {
+    Class class = objc_getClass("QQLogReporter");
+    SEL selector = NSSelectorFromString(@"init");
+    Method method = class_getInstanceMethod(class, selector);
+    IMP imp = imp_implementationWithBlock(^(id self, id arg1) {
+        return nil;
+    });
+    class_replaceMethod(class, selector, imp, method_getTypeEncoding(method));
+}
+
+__attribute__((constructor)) static void ErrorLogReport(void) {
+    Class class = objc_getClass("ErrorLogReport");
+    SEL selector = NSSelectorFromString(@"init");
+    Method method = class_getInstanceMethod(class, selector);
+    IMP imp = imp_implementationWithBlock(^(id self, id arg1) {
+        return nil;
+    });
+    class_replaceMethod(class, selector, imp, method_getTypeEncoding(method));
+}
+
+__attribute__((constructor)) static void LogReportEvent(void) {
+    Class class = objc_getClass("LogReportEvent");
+    SEL selector = NSSelectorFromString(@"init");
+    Method method = class_getInstanceMethod(class, selector);
+    IMP imp = imp_implementationWithBlock(^(id self, id arg1) {
+        return nil;
+    });
+    class_replaceMethod(class, selector, imp, method_getTypeEncoding(method));
+}
+
+__attribute__((constructor)) static void KeyEventLogReport(void) {
+    Class class = objc_getClass("KeyEventLogReport");
+    SEL selector = NSSelectorFromString(@"init");
+    Method method = class_getInstanceMethod(class, selector);
+    IMP imp = imp_implementationWithBlock(^(id self, id arg1) {
+        return nil;
     });
     class_replaceMethod(class, selector, imp, method_getTypeEncoding(method));
 }

@@ -13,6 +13,7 @@ A dynamic library tweak for QQ macOS.
 ## Feature
 
 - Prevent message revoked
+- Remove report engine
 
 ## Todo
 
