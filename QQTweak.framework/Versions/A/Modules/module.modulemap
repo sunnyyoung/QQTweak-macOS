@@ -1,0 +1,6 @@
+framework module QQTweak {
+  umbrella header "QQTweak.h"
+
+  export *
+  module * { export * }
+}

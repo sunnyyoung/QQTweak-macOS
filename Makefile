@@ -1,52 +1,59 @@
-FILEPATH=/Applications/QQ.app/Contents/MacOS
-FILENAME=QQ
-TWEAKFILE=QQTweak.m
-DYLIBFILE=QQTweak.dylib
-
-build::
-	clang -dynamiclib ./${TWEAKFILE} -fobjc-link-runtime -current_version 1.0 -compatibility_version 1.0 -o ./${DYLIBFILE}
+APP_PATH=/Applications/QQ.app/Contents/MacOS
+APP_NAME=QQ
+BACKUP_NAME=QQ.bak
+FRAMEWORK_PATH=QQTweak.framework
+FRAMEWORK_NAME=QQTweak
+DYLIB_NAME=QQTweak.dylib
 
 debug::
-	make clean
-	make build
-	DYLD_INSERT_LIBRARIES=./${DYLIBFILE} ${FILEPATH}/${FILENAME} &
+	DYLD_INSERT_LIBRARIES=${FRAMEWORK_PATH}/${FRAMEWORK_NAME} ${APP_PATH}/${APP_NAME} &
 
 install::
 	@if ! [[ $EUID -eq 0 ]]; then\
     	echo "This script should be run using sudo or as the root user.";\
     	exit 1;\
 	fi
-	@if ! [ -f "${FILEPATH}/${FILENAME}" ]; then\
-		echo "Can not find the ${FILENAME}.";\
+	@if ! [ -f "${APP_PATH}/${APP_NAME}" ]; then\
+		echo "Can not find the QQ.";\
 		exit 1;\
 	fi
-	@if ! [ -f "./${DYLIBFILE}" ]; then\
-		echo "Can not find the dylib file, please build first.";\
+	@if ! [ -d "${FRAMEWORK_PATH}" ]; then\
+		echo "Can not find the framework, please build first.";\
 		exit 1;\
 	fi
-
-	@cp ${FILEPATH}/${FILENAME} ${FILEPATH}/${FILENAME}.bak;
-	@cp ./${DYLIBFILE} ${FILEPATH}/${DYLIBFILE};
-	@./insert_dylib @executable_path/${DYLIBFILE} ${FILEPATH}/${FILENAME} ${FILEPATH}/${FILENAME} --all-yes;
-	@echo "Install successed!";
+	@if [ -f "${APP_PATH}/${DYLIB_NAME}" ]; then\
+		echo "You're using old version tweak, please uninstall first.";\
+		exit 1;\
+	fi
+	@if [ -d "${APP_PATH}/${FRAMEWORK_PATH}" ]; then\
+		rm -rf ${APP_PATH}/${FRAMEWORK_PATH};\
+		cp -R ${FRAMEWORK_PATH} ${APP_PATH};\
+		echo "Framework found! Replace with new framework successfully!";\
+	else \
+		cp ${APP_PATH}/${APP_NAME} ${APP_PATH}/${BACKUP_NAME};\
+		cp -R ${FRAMEWORK_PATH} ${APP_PATH};\
+		./insert_dylib @executable_path/${FRAMEWORK_PATH}/${FRAMEWORK_NAME} ${APP_PATH}/${APP_NAME} ${APP_PATH}/${APP_NAME} --all-yes;\
+		echo "Install successfully!";\
+	fi
 
 uninstall::
 	@if ! [[ $EUID -eq 0 ]]; then\
     	echo "This script should be run using sudo or as the root user.";\
     	exit 1;\
 	fi
-	@if ! [ -f "${FILEPATH}/${FILENAME}" ]; then\
-		echo "Can not find the ${FILENAME}.";\
+	@if ! [ -f "${APP_PATH}/${APP_NAME}" ]; then\
+		echo "Can not find the QQ.";\
 		exit 1;\
 	fi
-	@if ! [ -f "${FILEPATH}/${FILENAME}.bak" ]; then\
-		echo "Can not find the ${FILENAME} backup file.";\
+	@if ! [ -f "${APP_PATH}/${BACKUP_NAME}" ]; then\
+		echo "Can not find the QQ backup file.";\
 		exit 1;\
 	fi
 
-	@rm -rf ${FILEPATH}/${DYLIBFILE};
-	@mv ${FILEPATH}/${FILENAME}.bak ${FILEPATH}/${FILENAME};
-	@echo "Uninstall successed";
+	@rm -rf ${APP_PATH}/${DYLIB_NAME};
+	@rm -rf ${APP_PATH}/${FRAMEWORK_PATH};
+	@mv ${APP_PATH}/${BACKUP_NAME} ${APP_PATH}/${APP_NAME};
+	@echo "Uninstall successfully";
 
 clean::
-	rm -rf ./${DYLIBFILE}
+	rm -rf ${FRAMEWORK_PATH}

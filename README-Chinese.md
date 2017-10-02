@@ -13,31 +13,22 @@ QQ macOS 客户端 Tweak 动态库。
 ## 功能
 
 - 阻止消息撤回
-- 去除自动上报
 
 ## Todo
 
+- [x] 修复数据文件储存路径
 - [ ] 增加撤回通知详细信息
-- [ ] 修复数据文件储存路径
+- [ ] 增加 Alfred 支持
 
 ## 使用
 
 - `sudo make install`   安装动态库
 - `sudo make uninstall` 卸载动态库
 
-## 开发调试
-
-**Requirement: Command Line Tools**
-
-运行命令：`xcode-select --install` 安装 Command Line Tools
-
-- `make build` 编译 dylib 动态库到当前目录下
-- `make debug` 编译 dylib 动态库并临时注入QQ macOS 客户端
-- `make clean` 清除生成文件
-
 ## 依赖
 
 - [insert_dylib](https://github.com/Tyilo/insert_dylib)
+- [fishhook](https://github.com/facebook/fishhook)
 
 ## 参考
 
@@ -45,4 +36,6 @@ QQ macOS 客户端 Tweak 动态库。
 
 ## License
 
-The [MIT License](LICENSE).
+The [Apache-2.0 License](LICENSE).
+
+
